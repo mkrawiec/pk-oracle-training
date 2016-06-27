@@ -29,10 +29,18 @@ BEGIN
         INTO product2 FROM PRODUCTS P, DIGITAL_RESOURCES R
         WHERE P.PRD_ID = p2_id AND R.DRES_ID = P.PRD_DRES_ID;
 
-    DBMS_OUTPUT.PUT_LINE(product1.name || ' | ' || product2.name);
-    DBMS_OUTPUT.PUT_LINE(product1.price || ' | ' || product2.price);
-    DBMS_OUTPUT.PUT_LINE(product1.filename || ' | ' || product2.filename);
-    DBMS_OUTPUT.PUT_LINE(product1.max_download || ' | ' || product2.max_download);
+
+    IF product1.name = product2.name
+        AND product1.price = product2.price
+        AND product1.filename = product2.filename
+    THEN
+        DBMS_OUTPUT.PUT_LINE('Produkty takie same');
+        IF product1.max_download = product2.max_download THEN
+            DBMS_OUTPUT.PUT_LINE('Taka sama liczba możliwych pobran');
+        END IF;
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Produkty różne');
+    END IF;
 
     EXCEPTION
       WHEN NO_DATA_FOUND THEN
@@ -44,9 +52,60 @@ END;
 
 SHOW ERRORS PROCEDURE usr_compare_products;
 
+CREATE OR REPLACE FUNCTION RandomString(p_Characters varchar2, p_length number)
+return varchar2
+is
+  l_res varchar2(256);
+begin
+  select substr(listagg(substr(p_Characters, level, 1)) within group(order by dbms_random.value), 1, p_length)
+    into l_res
+    from dual
+  connect by level <= length(p_Characters);
+  return l_res;
+end;
+/
+
+CREATE OR REPLACE PROCEDURE usr_gen_fake_usrs(num IN number)
+IS
+    TYPE usr IS RECORD(
+        gender number, -- (0 = f) (1 = m)
+        f_name CUSTOMERS.CUS_FIRST_NAME%type,
+        l_name CUSTOMERS.CUS_LAST_NAME%type
+    );
+
+    TYPE usr_array IS TABLE OF usr;
+    arr usr_array := usr_array();
 BEGIN
-    usr_compare_products(21, 22);
-    usr_compare_products(1, 2);
+    arr.extend(num);
+
+    -- Generuje płeć wszystkich osobników
+    FOR i IN 1..num LOOP
+        arr(i).gender := round(dbms_random.value(0, 1));
+    END LOOP;
+
+    FOR i IN 1..num LOOP
+        IF arr(i).gender = 0 THEN
+            arr(i).f_name := INITCAP(randomstring('maciej', 5));
+            arr(i).l_name := INITCAP(randomstring('krawiec', 5) || 'ski');
+        ELSE
+            arr(i).f_name := INITCAP(randomstring('maciej', 5) || 'a');
+            arr(i).l_name := INITCAP(randomstring('krawiec', 5) || 'ska');
+        END IF;
+    END LOOP;
+
+    FOR i IN 1..num LOOP
+        DBMS_OUTPUT.PUT_LINE(arr(i).f_name || ' ' || arr(i).l_name);
+        INSERT INTO CUSTOMERS(CUS_FIRST_NAME, CUS_LAST_NAME, CUS_ADD_ID)
+            VALUES (arr(i).f_name, arr(i).l_name, 1);
+    END LOOP;
+END;
+/
+
+SHOW ERRORS PROCEDURE usr_gen_fake_usrs;
+
+BEGIN
+    usr_compare_products(1, 1);
+    usr_gen_fake_usrs(10);
 END;
 /
 
