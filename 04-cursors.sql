@@ -1,6 +1,10 @@
-/*
- * Przykład użycia kursora niejawnego i jawnego
- */
+------------------------------
+--     Maciej Krawiec       --
+--   Mech PK 2015/2016      --
+--         12K2             --
+------------------------------
+--       04. Cursors        --
+------------------------------
 
 SET SERVEROUTPUT ON;
 

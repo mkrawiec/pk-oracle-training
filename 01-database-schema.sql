@@ -1,7 +1,10 @@
-/**
- * Księgarnia internetowa
- * Maciej Krawiec
- */
+------------------------------
+--     Maciej Krawiec       --
+--   Mech PK 2015/2016      --
+--         12K2             --
+------------------------------
+--   01. Database Schema    --
+------------------------------
 
 -- drop
 DROP TABLE SALES_PRODUCTS;

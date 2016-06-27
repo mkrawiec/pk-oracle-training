@@ -1,6 +1,10 @@
-/*
- * Przykład użycia rekordu zdefiniowanego przez użytkownika
- */
+------------------------------
+--     Maciej Krawiec       --
+--   Mech PK 2015/2016      --
+--         12K2             --
+------------------------------
+--       05. Records        --
+------------------------------
 
 SET SERVEROUTPUT ON;
 

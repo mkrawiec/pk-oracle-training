@@ -1,3 +1,11 @@
+------------------------------
+--     Maciej Krawiec       --
+--   Mech PK 2015/2016      --
+--         12K2             --
+------------------------------
+--       02. Inserts        --
+------------------------------
+
 INSERT INTO CATEGORIES (CAT_NAME, CAT_PARENT_ID) VALUES ('Root', NULL);
 INSERT INTO CATEGORIES (CAT_NAME, CAT_PARENT_ID) VALUES ('Książki', 1);
 INSERT INTO CATEGORIES (CAT_NAME, CAT_PARENT_ID) VALUES ('Biografie', 2);

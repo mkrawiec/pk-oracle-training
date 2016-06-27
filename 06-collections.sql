@@ -1,6 +1,10 @@
-/*
- * Przykład użycia kolekcji
- */
+------------------------------
+--     Maciej Krawiec       --
+--   Mech PK 2015/2016      --
+--         12K2             --
+------------------------------
+--      06. Collections     --
+------------------------------
 
 SET SERVEROUTPUT ON;
 
