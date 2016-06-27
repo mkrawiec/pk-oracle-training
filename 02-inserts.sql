@@ -42,3 +42,4 @@ INSERT INTO PRODUCTS (PRD_NAME, PRD_PRICE, PRD_IMG, PRD_ISBN, PRD_CAT_ID, PRD_PT
 VALUES ('Elon Musk. Biografia twórcy PayPal, Tesla, SpaceX',
 42, 'elon_musk.png', '978-83-240-3440-6', 3, 1, NULL
 );
+
