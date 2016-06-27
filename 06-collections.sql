@@ -13,25 +13,41 @@ CREATE OR REPLACE PROCEDURE usr_apply_discounts
 IS
     TYPE discounts IS TABLE OF NUMBER INDEX BY VARCHAR2(20);
     list_of_discounts discounts;
-    name VARCHAR2(20);
-BEGIN
-    -- adding discounts to collection
-    list_of_discounts('Nowy rok') := 20;
-    list_of_discounts('Dzien dziecka') := 30;
-    list_of_discounts('Halloween') := 10;
-    list_of_discounts('Przecena swiateczna') := 5;
 
-    -- adding to the database
+    name varchar2(20);
+    curr_month varchar2(20);
+    discount number;
+BEGIN
+    -- Dodaj przeceny do kolekcji
+    list_of_discounts('January') := 20;
+    list_of_discounts('February') := 20;
+    list_of_discounts('March') := 30;
+    list_of_discounts('April') := 10;
+    list_of_discounts('May') := 10;
+    list_of_discounts('June') := 10;
+    list_of_discounts('July') := 10;
+    list_of_discounts('August') := 10;
+    list_of_discounts('September') := 10;
+    list_of_discounts('October') := 10;
+    list_of_discounts('November') := 10;
+    list_of_discounts('December') := 5;
+
+    -- Zróżnicuj przeceny +-5%
     name := list_of_discounts.FIRST;
     WHILE name IS NOT null LOOP
-        dbms_output.put_line('Przecena ' || name || ' o ' ||
-            TO_CHAR(list_of_discounts(name)) || '%');
+        list_of_discounts(name) := list_of_discounts(name) +
+            floor(dbms_random.value(0,5)) - floor(dbms_random.value(0,5));
 
-        INSERT INTO SALES(SAL_NAME, SAL_REDUCTION)
-        VALUES (name, TO_NUMBER(list_of_discounts(name)));
+        dbms_output.put_line('Miesiac ' || name || ' przecena o ' ||
+            TO_CHAR(list_of_discounts(name)) || '%');
 
         name := list_of_discounts.NEXT(name);
     END LOOP;
+
+    -- Dodaj do bazy przecene bieżącego miesiąca
+    SELECT to_char(sysdate, 'fmMonth') INTO curr_month FROM dual;
+    SELECT list_of_discounts(curr_month) INTO discount FROM dual;
+    INSERT INTO SALES(SAL_NAME, SAL_REDUCTION) VALUES (curr_month, discount);
 END;
 /
 
@@ -109,7 +125,7 @@ BEGIN
     dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
     usr_apply_discounts();
     dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
-    usr_shop_sim(10);
+    usr_shop_sim(11);
     dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
 END;
 /
