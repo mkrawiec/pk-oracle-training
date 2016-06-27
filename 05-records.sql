@@ -36,10 +36,10 @@ BEGIN
     THEN
         DBMS_OUTPUT.PUT_LINE('Produkty takie same');
         IF product1.max_download = product2.max_download THEN
-            DBMS_OUTPUT.PUT_LINE('Taka sama liczba możliwych pobran');
+            DBMS_OUTPUT.PUT_LINE('Taka sama liczba mozliwych pobran');
         END IF;
     ELSE
-        DBMS_OUTPUT.PUT_LINE('Produkty różne');
+        DBMS_OUTPUT.PUT_LINE('Produkty rozne');
     END IF;
 
     EXCEPTION
@@ -104,8 +104,13 @@ END;
 SHOW ERRORS PROCEDURE usr_gen_fake_usrs;
 
 BEGIN
+    dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
     usr_compare_products(1, 1);
+    usr_compare_products(13, 1);
+    usr_compare_products(4, 2);
+    dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
     usr_gen_fake_usrs(10);
+    dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
 END;
 /
 
