@@ -55,9 +55,52 @@ END;
 
 SHOW ERRORS PROCEDURE usr_rise_prices;
 
+-- Wyszukiwanie wśród produktów sklepu
+CREATE OR REPLACE PROCEDURE usr_search_prd(phrase IN varchar2)
+IS
+    TYPE result IS RECORD (
+        name PRODUCTS.PRD_NAME%type,
+        filename DIGITAL_RESOURCES.DRES_FILENAME%type
+    );
+
+    rec result;
+
+    CURSOR cur_search_prd(name in PRODUCTS.PRD_NAME%type)
+    RETURN result
+	IS
+		SELECT P.PRD_NAME, DR.DRES_FILENAME
+		FROM PRODUCTS P LEFT JOIN DIGITAL_RESOURCES DR
+        ON (P.PRD_DRES_ID = DR.DRES_ID)
+		WHERE LOWER(PRD_NAME) LIKE LOWER('%'||name||'%');
+BEGIN
+    OPEN cur_search_prd(phrase);
+
+    LOOP
+        FETCH cur_search_prd INTO rec.name, rec.filename;
+        dbms_output.put_line('- ' || rec.name || ' (' || rec.filename || ')');
+
+        EXIT WHEN cur_search_prd%NOTFOUND;
+    END LOOP;
+
+    -- brak wynikow
+    IF cur_search_prd%ROWCOUNT = 0 THEN
+        dbms_output.put_line('Brak wynikow.');
+    END IF;
+
+    CLOSE cur_search_prd;
+END;
+/
+
+SHOW ERRORS PROCEDURE usr_search_prd;
+
 BEGIN
     usr_replace_backslash();
+    dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
     usr_rise_prices(10);
+    dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
+    dbms_output.put_line('Wyszukiwanie: ');
+    usr_search_prd('JavaScript');
+    dbms_output.put_line('x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x');
 END;
 /
 
